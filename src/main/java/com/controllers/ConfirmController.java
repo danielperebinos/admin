@@ -1,4 +1,4 @@
-package com.example.company_management;
+package com.controllers;
 
 
 import javafx.fxml.FXML;

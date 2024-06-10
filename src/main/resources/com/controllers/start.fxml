@@ -10,7 +10,7 @@
 
 
 <AnchorPane prefHeight="549.0" prefWidth="825.0" style="-fx-background-color: #24242C;"
-            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.company_management.StartController">
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.controllers.StartController">
     <children>
         <ImageView fitHeight="305.0" fitWidth="466.0" layoutX="180.0" layoutY="34.0" pickOnBounds="true"
                    preserveRatio="true">

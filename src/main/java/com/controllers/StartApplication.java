@@ -1,8 +1,7 @@
-package com.example.company_management;
+package com.controllers;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent; // Adaugă importul pentru javafx.scene.Parent
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 

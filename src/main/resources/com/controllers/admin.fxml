@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="660.0" prefWidth="998.0" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.company_management.AdminPanelController">
+            fx:controller="com.controllers.AdminPanelController">
     <children>
         <HBox prefHeight="662.0" prefWidth="999.0">
             <children>

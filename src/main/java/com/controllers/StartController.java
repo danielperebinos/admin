@@ -1,4 +1,4 @@
-package com.example.company_management;
+package com.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +20,7 @@ public class StartController {
         currentStage.close();
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/company_management/admin.fxml"));
+        loader.setLocation(getClass().getResource("/com/controllers/admin.fxml"));
 
         try {
             loader.load();

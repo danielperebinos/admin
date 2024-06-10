@@ -1,5 +1,7 @@
-package com.example.company_management;
+package com.controllers;
 
+import com.entities.Client;
+import com.services.ClientService;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -17,33 +19,23 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminPanelController {
-    @FXML
-    private TableView<Client> clientTable;
-
-    @FXML
-    private TableColumn selectClientColumn, idClientColumn, nameClientColumn, updateClientColumn;
-
     private final ObservableList<Client> clientsRows = FXCollections.observableArrayList();
-
     @FXML
     private Button clientMenuButton, contractMenuButton, clientDeleteButton, clientCreateButton;
-
     @FXML
     private Pane clientPanel, contractPanel;
-
+    @FXML
+    private TableColumn selectClientColumn, idClientColumn, nameClientColumn, updateClientColumn;
     @FXML
     private TextField clientNameInput;
 
+    private ClientService service = new ClientService();
 
     private void setClientPanel() {
         clientMenuButton.setStyle("-fx-background-color: rgb(88, 88, 107);");
@@ -72,7 +64,7 @@ public class AdminPanelController {
     @FXML
     private void onClickClientSearchButton() {
         String name = this.clientNameInput.getText();
-        this.filterClients(name);
+        this.refreshClientRows(this.service.filterByName(name));
     }
 
     @FXML
@@ -84,8 +76,7 @@ public class AdminPanelController {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(clientCreateButton.getScene().getWindow());
         stage.showAndWait();
-        CreateClientController controller = loader.getController();
-        loadClients();
+        this.refreshClientRows(this.service.selectAll());
     }
 
     @FXML
@@ -101,71 +92,25 @@ public class AdminPanelController {
         stage.showAndWait();
 
         if (controller.isConfirmed()) {
-            deleteClients();
-            loadClients();
-        }
-    }
-
-    private void loadClients() {
-        this.filterClients("");
-    }
-
-    private void filterClients(String filter) {
-        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
-            try {
-                Query<Client> query;
-                String queryString = "FROM Client";
-                if (filter.length() > 0) {
-                    queryString += " WHERE name LIKE :name";
+            List<Client> clientsToDelete = new ArrayList<Client>();
+            for (Client client : this.clientsRows) {
+                if (client.isSelected()) {
+                    clientsToDelete.add(client);
                 }
-
-                query = session.createQuery(queryString, Client.class);
-
-                if (filter.length() > 0) {
-                    query.setParameter("name", "%" + filter + "%");
-                }
-                List<Client> clients = query.getResultList();
-                this.clientsRows.clear();
-                this.clientsRows.addAll(clients);
-            } catch (Exception e) {
-                System.out.println("Some Error");
-                e.printStackTrace();
             }
-        } catch (Exception e) {
-            System.out.println("Exception");
-            e.printStackTrace();
+            this.service.deleteMany(clientsToDelete);
+            this.refreshClientRows(this.service.selectAll());
         }
     }
 
-    private void deleteClients() {
-        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
-            try {
-                Transaction transaction = session.beginTransaction();
-
-                for (Client client : this.clientsRows) {
-                    if (client.isSelected()) {
-                        session.delete(client);
-                    }
-                }
-
-                transaction.commit();
-            } catch (Exception e) {
-                System.out.println("Error deleting client");
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            System.out.println("Exception");
-            e.printStackTrace();
-        }
-
-    }
 
     public ObservableList<Client> getClientRows() {
         return this.clientsRows;
+    }
+
+    public void refreshClientRows(List<Client> clients) {
+        this.clientsRows.clear();
+        this.clientsRows.addAll(clients);
     }
 
     @FXML
@@ -231,7 +176,7 @@ public class AdminPanelController {
                                         UpdateClientController controller = loader.getController();
                                         controller.setClientToUpdate(Client);
                                         stage.showAndWait();
-                                        loadClients();
+                                        refreshClientRows(service.selectAll());
                                     });
                                     setGraphic(updateClientButton);
                                     setText(null);
@@ -242,7 +187,12 @@ public class AdminPanelController {
                     }
                 };
         updateClientColumn.setCellFactory(cellFactory);
-        Platform.runLater(this::loadClients);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                refreshClientRows(service.selectAll());
+            }
+        });
         this.setClientPanel();
     }
 }

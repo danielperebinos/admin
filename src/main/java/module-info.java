@@ -17,6 +17,9 @@ module com.example.company_management {
     requires java.sql;
     requires org.postgresql.jdbc;
 
-    opens com.example.company_management to javafx.fxml, org.hibernate.orm.core;
-    exports com.example.company_management;
+    opens com.controllers to javafx.fxml, org.hibernate.orm.core;
+    opens com.entities to javafx.fxml, org.hibernate.orm.core;
+//    opens com.services to javafx.fxml, org.hibernate.orm.core;
+    exports com.controllers;
+    exports com.entities;
 }

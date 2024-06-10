@@ -21,6 +21,6 @@
         <property name="hibernate.show_sql">true</property>
 
         <!-- Entity mapping -->
-        <mapping class="com.example.company_management.Client"/>
+        <mapping class="com.entities.Client"/>
     </session-factory>
 </hibernate-configuration>

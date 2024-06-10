@@ -9,7 +9,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.company_management.ConfirmController"
+      fx:controller="com.controllers.ConfirmController"
       prefWidth="300" prefHeight="150" alignment="CENTER">
 
     <Label text="Are you sure you want to delete the clients?" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>

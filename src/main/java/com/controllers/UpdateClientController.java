@@ -1,5 +1,6 @@
-package com.example.company_management;
+package com.controllers;
 
+import com.entities.Client;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -9,27 +10,35 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-public class CreateClientController {
-
-    public boolean isClientCreated() {
-        return clientCreated;
-    }
-
-    private boolean clientCreated = false;
-
-    @FXML
-    private Button createClientButton;
+public class UpdateClientController {
 
     @FXML
     private TextField nameField;
 
     @FXML
-    private void createClient() {
-        System.out.println("Create Client");
-        String clientName = this.nameField.getText();
-        this.createClient(clientName);
-        this.clientCreated = true;
-        this.closeStage();
+    private Button refuseButton;
+
+    private boolean confirmed = false;
+
+    private Client clientToUpdate;
+
+    public void setClientToUpdate(Client client) {
+        this.clientToUpdate = client;
+        nameField.setText(client.getName());
+    }
+
+    @FXML
+    private void confirmUpdate() {
+        confirmed = true;
+        String new_name = this.nameField.getText();
+        createClient(new_name);
+        closeStage();
+    }
+
+    @FXML
+    private void cancelUpdate() {
+        confirmed = false;
+        closeStage();
     }
 
     private void createClient(String name) {
@@ -38,12 +47,10 @@ public class CreateClientController {
              Session session = sessionFactory.openSession()) {
             try {
                 Transaction transaction = session.beginTransaction();
-
-                Client client = new Client();
-                client.setName(name);
-                session.save(client);
+                this.clientToUpdate.setName(name);
+                session.update(this.clientToUpdate);
                 transaction.commit();
-                this.clientCreated = true;
+                this.confirmed = true;
             } catch (Exception e) {
                 System.out.println("Error deleting client");
                 e.printStackTrace();
@@ -55,14 +62,11 @@ public class CreateClientController {
 
     }
 
-    @FXML
-    private void cancelCreate() {
-        System.out.println("Cancel");
-        this.closeStage();
-    }
-
     private void closeStage() {
-        ((Stage) createClientButton.getScene().getWindow()).close();
+        ((Stage) refuseButton.getScene().getWindow()).close();
     }
 
+    public boolean isConfirmed() {
+        return confirmed;
+    }
 }

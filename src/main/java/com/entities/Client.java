@@ -1,4 +1,4 @@
-package com.example.company_management;
+package com.entities;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,20 +16,16 @@ public class Client {
     @Column(name = "name")
     private String name;
 
+    @Transient
+    private final BooleanProperty selected = new SimpleBooleanProperty(false);
+
     public boolean isSelected() {
         return selected.get();
-    }
-
-    public BooleanProperty selectedProperty() {
-        return selected;
     }
 
     public void setSelected(Boolean selected) {
         this.selected.set(selected);
     }
-
-    @Transient
-    private BooleanProperty selected = new SimpleBooleanProperty(false);
 
     public String getName() {
         return this.name;
