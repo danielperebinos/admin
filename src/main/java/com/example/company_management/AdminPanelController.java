@@ -77,18 +77,20 @@ public class AdminPanelController {
 
     @FXML
     private void onClickClientDeleteButton() throws IOException {
+        FXMLLoader loader = new FXMLLoader(AdminPanelController.class.getResource("confirm.fxml"));
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(
-                AdminPanelController.class.getResource("confirm.fxml"));
-        stage.setScene(new Scene(root));
-        stage.setTitle("My modal window");
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Confirmation");
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(
-                (this.clientDeleteButton).getScene().getWindow());
-        stage.show();
+        stage.initOwner(clientDeleteButton.getScene().getWindow());
 
-//        this.deleteClients();
-//        this.loadClients();
+        ConfirmController controller = loader.getController();
+        stage.showAndWait();
+
+        if (controller.isConfirmed()) {
+            deleteClients();
+            loadClients();
+        }
     }
 
     private void loadClients() {

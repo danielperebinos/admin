@@ -15,9 +15,9 @@
     <Label text="Are you sure you want to delete the clients?" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
 
     <HBox alignment="CENTER" spacing="20">
-        <Button fx:id="confirmButton" onMouseClicked="confirmDelete" text="Yes"
+        <Button fx:id="confirmButton" onMouseClicked="#confirmDelete" text="Yes"
                 style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
-        <Button fx:id="refuseButton" onMouseClicked="cancelDelete" text="No"
+        <Button fx:id="refuseButton" onMouseClicked="#cancelDelete" text="No"
                 style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
 

@@ -2,10 +2,14 @@ package com.example.company_management;
 
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class ConfirmController {
     private boolean confirmed = false;
+
+    @FXML
+    private Button refuseButton;
 
     @FXML
     private void confirmDelete() {
@@ -20,11 +24,11 @@ public class ConfirmController {
     }
 
     private void closeStage() {
-        ((Stage) closeButton.getScene().getWindow()).close();
+        ((Stage) refuseButton.getScene().getWindow()).close();
     }
 
     public boolean isConfirmed() {
         return confirmed;
     }
 }
-}
+
