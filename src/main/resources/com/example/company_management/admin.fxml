@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="660.0" prefWidth="998.0" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.company_management.AdminPanelController">
+    <children>
+        <HBox prefHeight="662.0" prefWidth="999.0">
+            <children>
+                <HBox prefHeight="662.0" prefWidth="234.0">
+                    <children>
+                        <VBox prefHeight="662.0" prefWidth="255.0" style="-fx-background-color: #24242C;">
+                            <children>
+                                <VBox prefHeight="124.0" prefWidth="232.0">
+                                    <children>
+                                        <ImageView fitHeight="173.0" fitWidth="237.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@logo.jpg"/>
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="538.0" prefWidth="216.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="237.0"
+                                                fx:id="clientMenuButton" onMouseClicked="#onClickClientMenuButton"
+                                                style="-fx-background-color: #282830;" text="Clients" textFill="WHITE">
+                                            <font>
+                                                <Font name="Malgun Gothic Bold" size="14.0"/>
+                                            </font>
+                                        </Button>
+                                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="43.0"
+                                                fx:id="contractMenuButton"
+                                                prefWidth="237.0" style="-fx-background-color: #282830;"
+                                                text="Contracts" textFill="WHITE"
+                                                onMouseClicked="#onClickContractMenuButton">
+                                            <font>
+                                                <Font name="Malgun Gothic" size="14.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Pane prefHeight="662.0" prefWidth="764.0" style="-fx-background-color: #535366;">
+                    <children>
+                        <Pane prefHeight="662.0" prefWidth="763.0" fx:id="clientPanel">
+                            <children>
+                                <HBox prefHeight="662.0" prefWidth="765.0">
+                                    <children>
+                                        <Pane prefHeight="662.0" prefWidth="792.0">
+                                            <children>
+                                                <VBox prefHeight="662.0" prefWidth="765.0">
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="98.0" prefWidth="762.0">
+                                                            <children>
+                                                                <HBox alignment="CENTER_RIGHT" prefHeight="133.0"
+                                                                      prefWidth="762.0" spacing="20.0">
+                                                                    <children>
+                                                                        <TextField fx:id="clientNameInput" promptText="Client name">
+                                                                            <HBox.margin>
+                                                                                <Insets/>
+                                                                            </HBox.margin>
+                                                                        </TextField>
+                                                                        <Button fx:id="clientSearchButton"
+                                                                                mnemonicParsing="false" text="Search"
+                                                                        onMouseClicked="#onClickClientSearchButton">
+                                                                            <HBox.margin>
+                                                                                <Insets/>
+                                                                            </HBox.margin>
+                                                                        </Button>
+                                                                        <Button fx:id="clientCreateButton"
+                                                                                mnemonicParsing="false" text="Create"/>
+                                                                        <Button fx:id="clientDeleteButton"
+                                                                                mnemonicParsing="false" text="Delete"
+                                                                                onMouseClicked="#onClickClientDeleteButton"/>
+                                                                    </children>
+                                                                    <padding>
+                                                                        <Insets left="25.0" right="25.0"/>
+                                                                    </padding>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox fillWidth="false" layoutX="10.0" layoutY="10.0"
+                                                              prefHeight="568.0" prefWidth="762.0">
+                                                            <children>
+                                                                <TableView fx:id="clientTable"
+                                                                           items="${controller.clientRows}"
+                                                                           prefHeight="571.0" prefWidth="762.0"
+                                                                           style="-fx-alignment: CENTER;">
+                                                                    <columns>
+                                                                        <TableColumn fx:id="selectClientColumn"
+                                                                                     style="-fx-alignment: CENTER;"
+                                                                                     prefWidth="75.0" text="Select"/>
+                                                                        <TableColumn fx:id="idClientColumn"
+                                                                                     style="-fx-alignment: CENTER;"
+                                                                                     prefWidth="60.0" text="Id"/>
+                                                                        <TableColumn fx:id="nameClientColumn"
+                                                                                     style="-fx-alignment: CENTER;"
+                                                                                     prefWidth="217.0" text="Name"/>
+                                                                        <TableColumn fx:id="updateClientColumn"
+                                                                                     style="-fx-alignment: CENTER;"
+                                                                                     prefWidth="408.0" text="Actions"/>
+                                                                    </columns>
+                                                                </TableView>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </Pane>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </Pane>
+                        <Pane accessibleText="Contract" prefHeight="662.0" prefWidth="763.0" fx:id="contractPanel">
+                            <children>
+                                <HBox prefHeight="662.0" prefWidth="765.0">
+                                    <children>
+                                        <Pane prefHeight="662.0" prefWidth="792.0">
+                                            <children>
+                                                <VBox prefHeight="662.0" prefWidth="765.0">
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="98.0" prefWidth="762.0">
+                                                            <children>
+                                                                <HBox alignment="CENTER_RIGHT" prefHeight="133.0"
+                                                                      prefWidth="762.0" spacing="20.0">
+                                                                    <children>
+                                                                        <TextField promptText="Contract">
+                                                                            <HBox.margin>
+                                                                                <Insets/>
+                                                                            </HBox.margin>
+                                                                        </TextField>
+                                                                        <Button mnemonicParsing="false" text="Search">
+                                                                            <HBox.margin>
+                                                                                <Insets/>
+                                                                            </HBox.margin>
+                                                                        </Button>
+                                                                        <Button mnemonicParsing="false" text="Create"/>
+                                                                    </children>
+                                                                    <padding>
+                                                                        <Insets left="25.0" right="25.0"/>
+                                                                    </padding>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox fillWidth="false" layoutX="10.0" layoutY="10.0"
+                                                              prefHeight="568.0" prefWidth="762.0">
+                                                            <children>
+                                                                <TableView prefHeight="571.0" prefWidth="762.0">
+                                                                    <columns>
+                                                                        <TableColumn prefWidth="75.0" text="Select"/>
+                                                                        <TableColumn prefWidth="257.0" text="Name"/>
+                                                                        <TableColumn prefWidth="428.0" text="Actions"/>
+                                                                    </columns>
+                                                                </TableView>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </Pane>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </Pane>
+                    </children>
+                </Pane>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
+

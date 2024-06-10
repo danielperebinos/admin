@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="549.0" prefWidth="825.0" style="-fx-background-color: #24242C;"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.company_management.StartController">
+    <children>
+        <ImageView fitHeight="305.0" fitWidth="466.0" layoutX="180.0" layoutY="34.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@logo.jpg"/>
+            </image>
+        </ImageView>
+        <Button layoutX="348.0" layoutY="440.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="129.0"
+                style="-fx-background-color: #434352;" text="Start" textFill="WHITE" onAction="#onStartButtonClick"
+                fx:id="startButton">
+            <font>
+                <Font name="Cascadia Mono Regular" size="24.0"/>
+            </font>
+        </Button>
+        <Text fill="WHITE" layoutX="189.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Get started with our IT company and project management app!" textAlignment="CENTER"
+              wrappingWidth="448.13671875">
+            <font>
+                <Font name="Microsoft New Tai Lue Bold" size="23.0"/>
+            </font>
+        </Text>
+    </children>
+</AnchorPane>
