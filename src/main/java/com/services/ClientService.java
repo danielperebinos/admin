@@ -61,6 +61,31 @@ public class ClientService {
         }
     }
 
+    public boolean create(String name) {
+        try {
+            Transaction transaction = session.beginTransaction();
+            Client client = new Client();
+            client.setName(name);
+            session.save(client);
+            transaction.commit();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean update(Client client, String name) {
+        try {
+            Transaction transaction = session.beginTransaction();
+            client.setName(name);
+            session.update(client);
+            transaction.commit();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     public void deleteMany(List<Client> clients) {
         try {
             Transaction transaction = session.beginTransaction();

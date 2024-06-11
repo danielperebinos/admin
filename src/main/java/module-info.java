@@ -19,7 +19,9 @@ module com.example.company_management {
 
     opens com.controllers to javafx.fxml, org.hibernate.orm.core;
     opens com.entities to javafx.fxml, org.hibernate.orm.core;
-//    opens com.services to javafx.fxml, org.hibernate.orm.core;
+    opens com to javafx.fxml, org.hibernate.orm.core;
+
     exports com.controllers;
     exports com.entities;
+    exports com;
 }
