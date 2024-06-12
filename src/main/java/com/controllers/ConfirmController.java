@@ -12,13 +12,13 @@ public class ConfirmController {
     private Button refuseButton;
 
     @FXML
-    private void confirmDelete() {
+    private void confirmAction() {
         confirmed = true;
         closeStage();
     }
 
     @FXML
-    private void cancelDelete() {
+    private void cancelAction() {
         confirmed = false;
         closeStage();
     }

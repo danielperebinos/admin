@@ -2,14 +2,13 @@ package com.controllers;
 
 import com.entities.Client;
 import com.services.ClientService;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,18 +23,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javafx.collections.FXCollections.observableArrayList;
+
 public class AdminPanelController {
-    private final ObservableList<Client> clientsRows = FXCollections.observableArrayList();
+    private final ObservableList<Client> clientsRows = observableArrayList();
+    private final int clientsPerPage = 19;
+    private final ClientService service = new ClientService();
     @FXML
     private Button clientMenuButton, contractMenuButton, clientDeleteButton, clientCreateButton;
     @FXML
-    private Pane clientPanel, contractPanel;
+    private Pane clientPanel, contractPanel, clientFakePanel;
     @FXML
-    private TableColumn selectClientColumn, idClientColumn, nameClientColumn, updateClientColumn;
+    private TableColumn selectClientColumn, idClientColumn, nameClientColumn, surnameClientColumn, phoneClientColumn,
+            adressClientColumn, updateClientColumn;
+    @FXML
+    private Pagination clientPagination;
     @FXML
     private TextField clientNameInput;
-
-    private ClientService service = new ClientService();
 
     private void setClientPanel() {
         clientMenuButton.setStyle("-fx-background-color: rgb(88, 88, 107);");
@@ -64,19 +68,31 @@ public class AdminPanelController {
     @FXML
     private void onClickClientSearchButton() {
         String name = this.clientNameInput.getText();
-        this.refreshClientRows(this.service.filterByName(name));
+        this.refreshClientRows(
+                this.service.filterByName(
+                        name,
+                        this.clientPagination.getCurrentPageIndex() * clientsPerPage,
+                        clientsPerPage
+                )
+        );
     }
 
     @FXML
     private void onClickClientCreateButton() throws IOException {
-        FXMLLoader loader = new FXMLLoader(AdminPanelController.class.getResource("clientCreateForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(AdminPanelController.class.getResource("clientForm.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene(loader.load()));
         stage.setTitle("Create new Client");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(clientCreateButton.getScene().getWindow());
         stage.showAndWait();
-        this.refreshClientRows(this.service.selectAll());
+        this.clientPagination.setCurrentPageIndex(1);
+        this.refreshClientRows(
+                this.service.selectAll(
+                        this.clientPagination.getCurrentPageIndex() * this.clientsPerPage,
+                        this.clientsPerPage
+                )
+        );
     }
 
     @FXML
@@ -99,7 +115,12 @@ public class AdminPanelController {
                 }
             }
             this.service.deleteMany(clientsToDelete);
-            this.refreshClientRows(this.service.selectAll());
+            this.refreshClientRows(
+                    this.service.selectAll(
+                            this.clientPagination.getCurrentPageIndex() * this.clientsPerPage,
+                            this.clientsPerPage
+                    )
+            );
         }
     }
 
@@ -115,33 +136,32 @@ public class AdminPanelController {
 
     @FXML
     void initialize() {
-        selectClientColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Client, CheckBox>, ObservableValue<CheckBox>>() {
+        this.clientPagination.setPageFactory(this::clientSetPageOnTable);
 
-            @Override
-            public ObservableValue<CheckBox> call(
-                    TableColumn.CellDataFeatures<Client, CheckBox> arg0) {
-                Client user = arg0.getValue();
+        selectClientColumn.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Client, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
+            Client user = arg0.getValue();
 
-                CheckBox checkBox = new CheckBox();
+            CheckBox checkBox = new CheckBox();
 
-                checkBox.selectedProperty().setValue(user.isSelected());
+            checkBox.selectedProperty().setValue(user.isSelected());
 
-                checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                    public void changed(ObservableValue<? extends Boolean> ov,
-                                        Boolean old_val, Boolean new_val) {
+            checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                public void changed(ObservableValue<? extends Boolean> ov,
+                                    Boolean old_val, Boolean new_val) {
 
-                        user.setSelected(new_val);
+                    user.setSelected(new_val);
 
-                    }
-                });
+                }
+            });
 
-                return new SimpleObjectProperty<CheckBox>(checkBox);
-
-            }
+            return new SimpleObjectProperty<CheckBox>(checkBox);
 
         });
         idClientColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
         nameClientColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
+        surnameClientColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("surname"));
+        phoneClientColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("phone"));
+        adressClientColumn.setCellValueFactory(new PropertyValueFactory<Client, String>("adress"));
         updateClientColumn.setCellValueFactory(new PropertyValueFactory<>("update"));
 
         Callback<TableColumn<Client, String>, TableCell<Client, String>> cellFactory = //
@@ -162,21 +182,25 @@ public class AdminPanelController {
                                 } else {
                                     updateClientButton.setOnAction(event -> {
                                         Client Client = getTableView().getItems().get(getIndex());
-                                        System.out.println("Update " + Client.getId() + "   " + Client.getName());
-                                        FXMLLoader loader = new FXMLLoader(AdminPanelController.class.getResource("clientUpdateForm.fxml"));
+                                        FXMLLoader loader = new FXMLLoader(AdminPanelController.class.getResource("clientForm.fxml"));
                                         Stage stage = new Stage();
                                         try {
                                             stage.setScene(new Scene(loader.load()));
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
                                         }
-                                        stage.setTitle("Create new Client");
+                                        stage.setTitle("Update Client");
                                         stage.initModality(Modality.WINDOW_MODAL);
-                                        stage.initOwner(clientCreateButton.getScene().getWindow());
-                                        UpdateClientController controller = loader.getController();
-                                        controller.setClientToUpdate(Client);
+                                        stage.initOwner(updateClientButton.getScene().getWindow());
+                                        ClientFormController controller = loader.getController();
+                                        controller.setClient(Client);
                                         stage.showAndWait();
-                                        refreshClientRows(service.selectAll());
+                                        refreshClientRows(
+                                                service.selectAll(
+                                                        clientPagination.getCurrentPageIndex(),
+                                                        clientsPerPage
+                                                )
+                                        );
                                     });
                                     setGraphic(updateClientButton);
                                     setText(null);
@@ -187,12 +211,22 @@ public class AdminPanelController {
                     }
                 };
         updateClientColumn.setCellFactory(cellFactory);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                refreshClientRows(service.selectAll());
-            }
-        });
         this.setClientPanel();
     }
+
+    private Node clientSetPageOnTable(int pageIndex) {
+        int clientsCount = (int) this.service.count();
+        int fromIndex = pageIndex * this.clientsPerPage;
+        int toIndex = Math.min(fromIndex + this.clientsPerPage, clientsCount);
+
+        if (fromIndex <= toIndex) {
+            this.onClickClientSearchButton();
+        } else {
+            this.clientsRows.clear();
+        }
+
+        return clientFakePanel;
+    }
+
+
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox alignment="TOP_CENTER" prefHeight="380.0" prefWidth="300" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.ClientFormController">
+    <HBox alignment="CENTER" prefHeight="164.0" prefWidth="300.0">
+        <children>
+
+            <Label fx:id="title" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Create Client">
+                <font>
+                    <Font name="Times New Roman Bold" size="12.0"/>
+                </font>
+            </Label>
+        </children>
+    </HBox>
+    <VBox alignment="TOP_CENTER" prefHeight="325.0" prefWidth="300.0">
+        <children>
+            <VBox alignment="TOP_CENTER" prefHeight="228.0" prefWidth="300.0"
+                  style="-fx-border-radius: 25; -fx-border-image-width: 2;">
+                <children>
+
+                    <HBox alignment="CENTER" prefHeight="41.0" prefWidth="300.0" spacing="10">
+                        <Label text="Name:"/>
+                        <TextField fx:id="nameField"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="41.0" prefWidth="300.0" spacing="10">
+                        <Label text="Surname:"/>
+                        <TextField fx:id="surnameField"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="41.0" prefWidth="300.0" spacing="10">
+                        <Label text="Phone:"/>
+                        <TextField fx:id="phoneField"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="41.0" prefWidth="300.0" spacing="10">
+                        <Label text="Adress:"/>
+                        <TextField fx:id="adressField"/>
+                    </HBox>
+                </children>
+                <padding>
+                    <Insets top="20.0"/>
+                </padding>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </VBox>
+
+            <HBox alignment="CENTER_RIGHT" spacing="20">
+                <Button fx:id="confirmButton" onAction="#confirmAction" text="Create"/>
+                <Button fx:id="cancelButton" onAction="#cancelAction" text="Cancel"/>
+                <padding>
+                    <Insets right="25.0"/>
+                </padding>
+            </HBox>
+        </children>
+    </VBox>
+
+</VBox>
